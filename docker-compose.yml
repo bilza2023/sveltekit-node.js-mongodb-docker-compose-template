@@ -6,14 +6,18 @@ services:
     restart: unless-stopped
     ports:
       - "3000:3000"
-
+    environment:
+      - VITE_SOUND_BASE_URL=https://taleem-media.blr1.cdn.digitaloceanspaces.com/sound
+      - VITE_IMAGES_BASE_URL=https://taleem-media.blr1.cdn.digitaloceanspaces.com
+      - VITE_DEFAULT_AUDIO=/music.opus
+  
   api:
-    build: ./api
+    build: ./api 
     restart: unless-stopped
     ports:
       - "5000:5000"
     environment:
-      - MONGO_URI=mongodb://admin:password@local_mongo:27017/localDb?authSource=admin
+      - LOCAL_MONGO_URI=mongodb://admin:password@local_mongo:27017/localDb?authSource=admin
     depends_on:
       - local_mongo
 
@@ -25,6 +29,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: localDb
     volumes:
       - mongodb_data:/data/db
 
